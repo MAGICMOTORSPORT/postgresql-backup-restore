@@ -1,6 +1,6 @@
 # With Python 3.12.4 on Alpine 3.20, s3cmd 2.4.0 fails with an AttributeError.
 # See ITSE-1440 for details.
-FROM python:3.12.4-alpine
+FROM python:3.13.2-alpine
 
 # Current version of s3cmd is in edge/testing repo
 RUN echo https://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories
@@ -9,11 +9,14 @@ RUN echo https://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/reposito
 RUN apk update \
   && apk add --no-cache \
   bash \
-  postgresql16-client \
+  postgresql17-client \
   py3-magic \
   py3-dateutil \
   curl \
   jq
+
+# Install setuptools first
+RUN pip install setuptools
 
 RUN wget https://github.com/s3tools/s3cmd/archive/refs/tags/v2.4.0.tar.gz \
   && tar xzf v2.4.0.tar.gz \
